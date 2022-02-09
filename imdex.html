@@ -42,11 +42,102 @@
 
     </tr>
     <tr>
-      <td></td>
+      <td>Annual interest (%):</td>
+      <td> <input id="apr" onchange="calculate();" "></td>
+    </tr><!--apr-->
+    <tr><td>Repayment period (years) </td>
+      <td><input id=" years" onchange="calculate();"></td>
     </tr>
-
-
+    <!--years-->
+    <tr>
+      <td>Zipcode(to find lenders): </td>
+      <td> <input id="zipcode" onchange="calculate();"></td>
+    </tr>
+    <!--zipcode-->
+    <tr>
+      <th>Approximate Payments:</th>
+      <td><button onclick="calculate();">Calculate</button></td>
+    </tr>
+    <!--Payments-->
+    <tr>
+      <td>Monthly payment:</td>
+      <td>$ <span class="output" id="payment"></span></td>
+    </tr>
+    <!--Monthly payment-->
+    <tr>
+      <td>Total payment:</td>
+      <td> <span class="output" id="total"></span></td>
+    </tr>
+    <!--Total payment-->
+    <tr>
+      <td>Total interest:</td>
+      <td>$<span class="output" id="totalinterest"></span></td>
+    </tr>
+    <!--Total interest-->
+    <tr>
+      <th>Sponsors:</th>
+      <td colspan="2">
+        Apply for your loan with one of these fine lenders:
+        <div id="lenders"></div>
+      </td>
+    </tr>
   </table>
+  <!-- O restante deste exemplo é código JavaScript na marca <script> a seguir -->
+  <!-- Normalmente, este script ficaria na marca <head> do documento acima, mas -->
+  <!-- é mais fácil entendê-lo aqui, depois de ter visto seu contexto HTML -->
+  <script>
+    "use strict"; //Usa o modo restrito da ECMAScript 5 nos navegadores que o suportam
+    /*
+     *  Este script define a função calculate() chamada pelas rotinas de tratamento de evento
+     * no código HTML acima. A função lê valores de elementos <input>, calcula
+     * as informações de pagamento de empréstimo, exibe o resultado em elementos <span>.
+     * Também salva os dados do usuario, exibe links para finaceiras e desenha u gráfico.
+     */
+    function calculate() {
+      // Pesquisa os elementos de entrada e saída no documento.
+      var amount = document.getElementById("amount");
+      var apr = document.getElementById("apr");
+      var years = document.getElementById("years");
+      var zipcode = document.getElementById("zipcode");
+      var payment = document.getElementById("payment");
+      var total = document.getElementById("total");
+      var totalinterest = document.getElementById("totalinterest");
+
+      // Obtém a entrada do usuário através dos elementos de entrada. Presume que tudo isso
+      // é valido.
+      // Converte os juros de porcentagem para decimais e converte de taxa
+      // anual para taxa mensal. Converte o período de pagamento em anos
+      // para o número de pagamentos mensais.
+      var principal = perseFloat(amount.value);
+      var interest = perseFloat(apr.value) / 100 / 12;
+      var payments = perseFloat(years.value) * 12;
+      // Agora calcula o valor do pagamento mensal.
+      var x = Math.pow(1 + interest, payment); //Math.pow() calcula potências
+      var monthly = (principal * x * interest) / (x - 1);
+
+      // Se o resultado é um número finito, a entrada do usuário estava correta e
+      // temos resultados significativos para exibir
+      if (isFinite(monthly)) {
+        // Prenche os campos de saída, arredondando para Duas casas decimais
+        payment.innerHTML = monthly.toFixed(2);
+        total.innerHTML = (monthly * payments).toFixed(2);
+        totalinterest.innerHTML = ((monthly * payments) - principal).toFixed(2);
+
+        // Salva a entrada do usuário para que possamos recuperá-la na proxima vez que
+        // ele visitar
+        save(amount.value, apr.value, years.value, zipcode.value);
+
+
+      }
+
+
+
+
+
+
+
+    }
+  </script>
 </body>
 
 
