@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt/BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title> JavaScript Loan Calculator</title>
+  <style>
+    /*Esta é uma folha de estilos CSS: ela adiciona estilo na saída do programa. */
+    .output {
+      font-weight: bold;
+    }
+
+    #payment {
+      text-decoration: underline;
+    }
+
+    #graph {
+      border: solid #000 1px;
+    }
+
+    th,
+    td {
+      vertical-align: top;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Esta é uma tabela HTML com elementos <input> que permitem ao usuários inserir dados e elesmentos <span> nos quais o programa pode exibir seus resultados. Esses elementos têm identificações como "interest" e "years". Essas identificações são usadas no código JavaScript que vem após a tabela. Note que alguns dos elementos de entrada definem rotinas de tratamento de evento "onchange ou onclick". Elas especificam strings de código JavaScript a ser executado quando o usúario insere dados ou dá um clique. -->
+  <table>
+    <tr>
+      <th>Enter loan Data:</th>
+      <td></td>
+      <th>Loan Balance, Cumulative Equity, and Interest Payments</th>
+    </tr>
+    <tr>
+      <td>Amount of the loan ($)</td>
+      <td> <input id="amount" onchange="calculate();"></td>
+      <td rowspan="8">
+        <canvas id="graph" width="400" height="250"></canvas>
+      </td>
+
+    </tr>
+    <tr>
+      <td></td>
+    </tr>
+
+
+  </table>
+</body>
+
+
+
+
+
+
+
+</html>
