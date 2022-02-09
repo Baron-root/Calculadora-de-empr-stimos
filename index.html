@@ -126,6 +126,11 @@
         // Salva a entrada do usuário para que possamos recuperá-la na proxima vez que
         // ele visitar
         save(amount.value, apr.value, years.value, zipcode.value);
+        // Anúncio: localiza e exibe financeiras locais, mas ignora erros de rede
+        try {//Captura quaisquer erros que ocorram dentro destas chaves
+          getLenders(amountvalue, apr.value, years.value, zipcode.value);
+        }
+        
 
 
       }
