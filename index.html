@@ -112,7 +112,7 @@
       var interest = perseFloat(apr.value) / 100 / 12;
       var payments = perseFloat(years.value) * 12;
       // Agora calcula o valor do pagamento mensal.
-      var x = Math.pow(1 + interest, payment); //Math.pow() calcula potências
+      var x = Math.pow(1 + interest, payments); //Math.pow() calcula potências
       var monthly = (principal * x * interest) / (x - 1);
 
       // Se o resultado é um número finito, a entrada do usuário estava correta e
@@ -179,9 +179,65 @@
       // Localiza o elemento para exibir a lista de financeiras
       var ad = document.getElementById("lenders");
       if (!ad) return; //Encerra se não há ponto de saída
+      // Codifica a entrada do Usuário como parâmetros de consulta em um URL
+      var url = "getLenders.php" +     // Url do serviço mais
+        "?amt=" + encodeURIComponent(amount) +   // Url do serviço mais
+        // de consulta
+        "&apr=" + encodeURIComponent(apr) +
+        "&yrs=" + encodeURIComponent(years) +
+        "&zip=" + encodeURIComponent(zipcode);
 
+      // Busca o conteúdo  desse URL usando o objeto XMLHttpRequest
+      var req = new XMLHttpRequest();  // Inicia um novo pedido
+      req.open("GET", url);           // Um pedido Get da HTTP para o url
+      req.send(null);                // Envia o pedido sem corpo
 
-    }
+      // Antes de retornar, registra uma função de rotina de tratamento de evento que será
+      // chamada em um momento posterior, quando a resposta do servidor de HTTP chegar.
+      // Esse tipo de programação assincrona é muito comum em JavaScript do lado do
+      // Cliente.
+
+      req.onreadystatechange = function () {
+        if (req.readyState == 4 && req.status == 200) {
+          // Se chagamos até aqui, obtivemos uma resposta HTTP válida e completa
+          var response = req.responseText;     //Resposta HTTP como string
+          var lenders = JSON.parse(response);  // Analisa em um array JS
+
+          // Converte o array de objetos lender em uma string HTML
+          var list = "";
+          for (var i = 0; i < lenders.length; i++) {
+            list += "<li><a href='" + lenders[i].url + "'>" +
+              lenders[i].name + "</a>";
+          } // For
+          // Exibe o código HTML no elemento acima.
+          ad.innerHTML = "<ul>" + list + "</ul>"
+        }//readyState
+      }/* onreadystatechange */
+    }// getElementById
+    // Faz o gráfico do saldo devedor mensal, dos juros e do capital em um elemento <canvas>
+    // da HTML.
+    // Se for chamado sem argumentos, basta apagar qualquer gráfico desenhado anteriormente.
+    function chart(principal, interest, monthly, payments) {
+      var graph = document.getElementById("graph");     // Obtém a marca <canvas>
+      graph.width = graph.width;  //Mágica para apagar e redefinir o elemento
+      // canvas
+      // Se chamamos sem argumentos ou se esse navegador não suporta
+      // Elementos Gráficos em uma elemento <canvas>, basta retornar agora.
+      if (arguments.length == 0 || !graph.getContext) return;
+      // Obtém o objeto "contexto" de <canvas> que define a API de desenho
+      var g = graph.getContext("2d");  // Todo desenho é feito com esse objeto
+      var width = grafh.width, height = graph.height; // Obtém o tamanho da tela de 
+      // desenho
+      // Essas funções convertem números de pagamentos e valores monetários em pixels
+      function paymentTox(n) { return n * width / payments; }//PaymentTox
+      function amountToY(a) { return height - (a * height / (monthly * payments * 1.05)); }
+
+      // Os pagamentos são uma linha reta de (0,0) a (payments, monthy*payments)
+      g.moveTo(paymentTox(0), amountToY(0));  // Começa no canto inferior esquerdo
+      g.lineTo(paymentToX(payments)),
+      
+
+    } //chart
 
 
   </script>
